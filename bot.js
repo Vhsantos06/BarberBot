@@ -62,7 +62,8 @@ const resetSession = (phone) => {
   db.sessions[phone] = { step: "idle", data: {} };
 };
 
-const HEADERS = { "Client-Token": CLIENT_TOKEN };
+const HEADERS = { "Client-Token": CLIENT_TOKEN, "Content-Type": "application/json" };
+console.log("Client-Token carregado:", CLIENT_TOKEN);
 
 async function sendText(phone, text) {
   try {
