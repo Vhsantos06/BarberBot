@@ -1,4 +1,4 @@
-require("dotenv").config();
+// sem o dotenv — Railway injeta as variáveis direto
 const express = require("express");
 const axios = require("axios");
 
