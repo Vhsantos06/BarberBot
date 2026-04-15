@@ -1,4 +1,3 @@
-// sem o dotenv — Railway injeta as variáveis direto
 const express = require("express");
 const axios = require("axios");
 
@@ -6,6 +5,7 @@ const app = express();
 app.use(express.json());
 
 const ZAPI_BASE = `https://api.z-api.io/instances/3F19952FA6E6A2C35AEF6E59E5E6857E/token/671FB61810A695471479EF1A`;
+const CLIENT_TOKEN = "Fee4cb6fe355344709dd170d85c22df75S";
 
 const db = {
   barbers: [
@@ -54,9 +54,7 @@ const getAvailableSlots = (barberId, date) => {
 };
 
 const getSession = (phone) => {
-  if (!db.sessions[phone]) {
-    db.sessions[phone] = { step: "idle", data: {} };
-  }
+  if (!db.sessions[phone]) db.sessions[phone] = { step: "idle", data: {} };
   return db.sessions[phone];
 };
 
@@ -64,9 +62,11 @@ const resetSession = (phone) => {
   db.sessions[phone] = { step: "idle", data: {} };
 };
 
+const HEADERS = { "Client-Token": CLIENT_TOKEN };
+
 async function sendText(phone, text) {
   try {
-    await axios.post(`${ZAPI_BASE}/send-text`, { phone, message: text });
+    await axios.post(`${ZAPI_BASE}/send-text`, { phone, message: text }, { headers: HEADERS });
   } catch (e) {
     console.error("Erro ao enviar texto:", e.response?.data || e.message);
   }
@@ -77,7 +77,7 @@ async function sendList(phone, title, buttonLabel, sections) {
     await axios.post(`${ZAPI_BASE}/send-list`, {
       phone,
       listMessage: { title, buttonLabel, sections },
-    });
+    }, { headers: HEADERS });
   } catch (e) {
     console.error("Erro ao enviar lista:", e.response?.data || e.message);
     let fallback = `*${title}*\n\n`;
@@ -104,7 +104,7 @@ async function sendButtons(phone, text, buttons) {
           type: 1,
         })),
       },
-    });
+    }, { headers: HEADERS });
   } catch (e) {
     console.error("Erro ao enviar botões:", e.response?.data || e.message);
     await sendText(phone, text);
