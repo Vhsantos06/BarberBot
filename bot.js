@@ -5,7 +5,7 @@ const axios = require("axios");
 const app = express();
 app.use(express.json());
 
-const ZAPI_BASE = `https://api.z-api.io/instances/${process.env.ZAPI_INSTANCE_ID}/token/${process.env.ZAPI_TOKEN}`;
+const ZAPI_BASE = `https://api.z-api.io/instances/3F19952FA6E6A2C35AEF6E59E5E6857E/token/671FB61810A695471479EF1A`;
 
 const db = {
   barbers: [
